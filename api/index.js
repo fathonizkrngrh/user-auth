@@ -9,7 +9,7 @@ const {
   apiResponse,
   apiNotFoundResponse,
 } = require("./utils/apiResponse.utils");
-const routes = require("./routes/index");
+const routes = require("./routes/index.route");
 
 const app = express();
 const port = process.env.PORT || 7000;
@@ -52,7 +52,7 @@ app.use((err, req, res, next) =>
 );
 
 app.listen(port, () => {
-  console.info(`Server is running on port ${port}.`);
+  console.info(`======= Server is running on port ${port}. =======`);
 });
 
 module.exports = app;
