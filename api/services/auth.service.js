@@ -43,7 +43,7 @@ module.exports = {
       const { email, password } = req.body;
 
       const user = await User.findOne({
-        where: { email: email },
+        where: { email },
         include: "role",
       });
       if (!user) {
@@ -76,6 +76,26 @@ module.exports = {
         err.code || status.INTERNAL_SERVER_ERROR,
         err.status || "INTERNAL_SERVER_ERROR",
         err.message
+      );
+    }
+  },
+  me: async (req) => {
+    try {
+      const { id } = req.user;
+      const user = await User.findByPk(id, { include: "role" });
+      if (!user)
+        throw apiResponse(status.NOT_FOUND, "NOT_FOUND", "User not found");
+
+      const userTransformed = UserTransform(user);
+
+      return apiResponse(status.OK, "OK", "Success get authenticated user", {
+        user: userTransformed,
+      });
+    } catch (e) {
+      throw apiResponse(
+        e.code || status.INTERNAL_SERVER_ERROR,
+        e.status || "INTERNAL_SERVER_ERROR",
+        e.message
       );
     }
   },
