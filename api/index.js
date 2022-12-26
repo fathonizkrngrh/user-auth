@@ -52,7 +52,7 @@ app.use((err, req, res, next) =>
 );
 
 app.listen(port, () => {
-  console.info(`======= Server is running on port ${port}. =======`);
+  console.info(`======= Server is running on http://localhost:${port} =======`);
 });
 
 module.exports = app;

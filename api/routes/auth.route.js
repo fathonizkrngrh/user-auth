@@ -10,5 +10,6 @@ router.get("/", function (req, res, next) {
 });
 
 router.post("/register", authValidator.register, authController.register);
+router.post("/login", authValidator.login, authController.login);
 
 module.exports = router;

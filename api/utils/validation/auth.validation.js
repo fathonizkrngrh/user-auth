@@ -1,7 +1,11 @@
 const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
 const { StatusCodes: status } = require("http-status-codes");
-const { isEmailExist, isUsernameExist } = require("./exist.validation");
+const {
+  isEmailExist,
+  isEmailAvailable,
+  isUsernameAvailable,
+} = require("./exist.validation");
 const { apiResponseValidationError } = require("../apiResponse.utils");
 
 const options = {
@@ -33,7 +37,7 @@ module.exports = {
         .required()
         .label("username")
         .external(async (value) => {
-          return await isUsernameExist(value);
+          return await isUsernameAvailable(value);
         }),
       email: Joi.string()
         .email()
@@ -41,7 +45,7 @@ module.exports = {
         .required()
         .label("email")
         .external(async (value) => {
-          return await isEmailExist(value);
+          return await isEmailAvailable(value);
         }),
       password: passwordComplexity(complexityOptions)
         .required()
@@ -57,27 +61,28 @@ module.exports = {
       await schema.validateAsync(req.body, options);
       next();
     } catch (e) {
+      console.log(e);
       return res
         .status(status.UNPROCESSABLE_ENTITY)
         .json(apiResponseValidationError(e));
     }
   },
 
-  //   login: (req, res, next) => {
-  //     const schema = Joi.object({
-  //       email: Joi.string().email().max(255).required().label("email"),
-  //       password: Joi.string().required().label("password"),
-  //     });
+  login: (req, res, next) => {
+    const schema = Joi.object({
+      email: Joi.string().email().max(255).required().label("email"),
+      password: Joi.string().required().label("password"),
+    });
 
-  //     const { error } = schema.validate(req.body, options);
-  //     if (error) {
-  //       return res
-  //         .status(status.UNPROCESSABLE_ENTITY)
-  //         .json(apiResponseValidationError(error));
-  //     }
+    const { error } = schema.validate(req.body, options);
+    if (error) {
+      return res
+        .status(status.UNPROCESSABLE_ENTITY)
+        .json(apiResponseValidationError(error));
+    }
 
-  //     next();
-  //   },
+    next();
+  },
   //   updateProfile: async (req, res, next) => {
   //     const schema = Joi.object({
   //       fullname: Joi.string().max(255).label("fullname"),

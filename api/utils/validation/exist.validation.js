@@ -21,7 +21,7 @@ const customThrowErrorJoiString = (msg, field) => {
 };
 
 module.exports = {
-  isUsernameExist: async (username) => {
+  isUsernameAvailable: async (username) => {
     const user = await User.findOne({ where: { username: username } });
     if (user) {
       customThrowErrorJoiString("Username already exist", "username");
@@ -29,7 +29,7 @@ module.exports = {
 
     return true;
   },
-  isEmailExist: async (email) => {
+  isEmailAvailable: async (email) => {
     const user = await User.findOne({ where: { email: email } });
     if (user) {
       customThrowErrorJoiString("Email already exist", "email");
