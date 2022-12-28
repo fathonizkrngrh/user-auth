@@ -15,5 +15,11 @@ router.get("/", function (req, res, next) {
 router.post("/register", authValidator.register, authController.register);
 router.post("/login", authValidator.login, authController.login);
 router.get("/me", authentication, authController.me);
+router.post(
+  "/change-password",
+  authentication,
+  authValidator.changePwd,
+  authController.changePwd
+);
 
 module.exports = router;

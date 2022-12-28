@@ -47,7 +47,7 @@ module.exports = {
         include: "role",
       });
       if (!user) {
-        return apiResponse(
+        throw apiResponse(
           status.BAD_REQUEST,
           "BAD_REQUEST",
           "Email doesn't exist!!"
@@ -56,7 +56,7 @@ module.exports = {
 
       const isPasswordValid = await checkPassword(password, user.password);
       if (!isPasswordValid) {
-        return apiResponse(
+        throw apiResponse(
           status.BAD_REQUEST,
           "BAD_REQUEST",
           "Wrong password!!"
@@ -96,6 +96,47 @@ module.exports = {
         e.code || status.INTERNAL_SERVER_ERROR,
         e.status || "INTERNAL_SERVER_ERROR",
         e.message
+      );
+    }
+  },
+  register: async (req) => {
+    try {
+      const { id } = req.user;
+      const { oldPassword, newPassword } = req.body;
+
+      const user = await User.findByPk(id);
+      if (!user)
+        throw apiResponse(status.NOT_FOUND, "NOT_FOUND", "User not found");
+
+      const isPasswordValid = await checkPassword(oldPassword, user.password);
+      if (!isPasswordValid) {
+        throw apiResponse(
+          status.BAD_REQUEST,
+          "BAD_REQUEST",
+          "Old password does not match!"
+        );
+      }
+
+      const hashed = await hashPassword(newPassword);
+      const updatePassword = await user.update({
+        password: hashed,
+      });
+
+      const userTransformed = UserTransform(updatePassword);
+
+      return apiResponse(
+        status.OK,
+        "OK",
+        `Success change ${user.username} password`,
+        {
+          user: userTransformed,
+        }
+      );
+    } catch (err) {
+      throw apiResponse(
+        err.code || status.INTERNAL_SERVER_ERROR,
+        err.status || "INTERNAL_SERVER_ERROR",
+        err.message
       );
     }
   },
