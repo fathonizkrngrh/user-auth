@@ -1,8 +1,31 @@
 <template>
   <div class="container">
     <header class="jumbotron">
-      <h3>{{ content }}</h3>
+      <h3>
+        <strong>{{ userData.username }}</strong> Profile
+      </h3>
     </header>
+    <!-- <p>
+      <strong>Token:</strong>
+      {{ userData.data.token.substring(0, 20) }} ...
+      {{ userData.data.token.substr(userData.data.token.length - 20) }}
+    </p>
+    <p>
+      <strong>Message:</strong>
+      {{ userData.data.message }}
+    </p>
+    <p>
+      <strong>Id:</strong>
+      {{ userData.data.user.id }}
+    </p>
+    <p>
+      <strong>Email:</strong>
+      {{ userData.data.user.email }}
+    </p>
+    <p>
+      <strong>Authorities:</strong>
+      {{ userData.data.user.role }}
+    </p> -->
   </div>
 </template>
 
@@ -13,16 +36,16 @@ export default {
   name: "UserBoard",
   data() {
     return {
-      content: "",
+      userData: "",
     };
   },
   mounted() {
     UserService.getUserBoard().then(
       (response) => {
-        this.content = response.data;
+        this.userData = response.data.data.user;
       },
       (error) => {
-        this.content =
+        this.userData =
           (error.response &&
             error.response.data &&
             error.response.data.message) ||
