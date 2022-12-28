@@ -1,11 +1,6 @@
 const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
 const { StatusCodes: status } = require("http-status-codes");
-const {
-  isEmailExist,
-  isEmailAvailable,
-  isUsernameAvailable,
-} = require("./exist.validation");
 const { apiResponseValidationError } = require("../apiResponse.utils");
 
 const options = {
@@ -31,22 +26,8 @@ module.exports = {
   register: async (req, res, next) => {
     const schema = Joi.object({
       fullname: Joi.string().max(50).required().label("fullname"),
-      username: Joi.string()
-        .min(5)
-        .max(25)
-        .required()
-        .label("username")
-        .external(async (value) => {
-          return await isUsernameAvailable(value);
-        }),
-      email: Joi.string()
-        .email()
-        .max(255)
-        .required()
-        .label("email")
-        .external(async (value) => {
-          return await isEmailAvailable(value);
-        }),
+      username: Joi.string().min(5).max(25).required().label("username"),
+      email: Joi.string().email().max(255).required().label("email"),
       password: passwordComplexity(complexityOptions)
         .required()
         .label("password"),

@@ -5,7 +5,6 @@ import RegisterPage from "../components/registerPage.vue";
 // lazy-loaded
 const ProfilePage = () => import("../components/profilePage.vue");
 const BoardAdmin = () => import("../components/boardAdmin.vue");
-const BoardModerator = () => import("../components/boardModerator.vue");
 const BoardUser = () => import("../components/boardUser.vue");
 
 const routes = [
@@ -39,12 +38,6 @@ const routes = [
     component: BoardAdmin,
   },
   {
-    path: "/mod",
-    name: "moderator",
-    // lazy-loaded
-    component: BoardModerator,
-  },
-  {
     path: "/user",
     name: "user",
     // lazy-loaded
@@ -60,7 +53,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const publicPages = ["/login", "/register", "/home"];
   const authRequired = !publicPages.includes(to.path);
-  const loggedIn = localStorage.getItem("user");
+  const loggedIn = localStorage.getItem("token");
 
   // trying to access a restricted page + not logged in
   // redirect to login page

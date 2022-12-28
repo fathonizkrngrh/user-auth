@@ -1,7 +1,12 @@
 <template>
   <div class="container">
     <header class="jumbotron">
-      <h3>{{ content }}</h3>
+      <h3>
+        <strong>{{ content }}</strong>
+        <strong v-if="errorMessage" class="alert alert-danger" role="alert">
+          {{ errorMessage }}
+        </strong>
+      </h3>
     </header>
   </div>
 </template>
@@ -10,19 +15,21 @@
 import UserService from "../services/user.service";
 
 export default {
-  name: "AdminBoard",
+  name: "UserBoard",
   data() {
     return {
       content: "",
+
+      errorMessage: "",
     };
   },
   mounted() {
-    UserService.getAdminBoard().then(
+    UserService.getUserBoard().then(
       (response) => {
-        this.content = response.data;
+        this.content = response.data.message;
       },
       (error) => {
-        this.content =
+        this.errorMessage =
           (error.response &&
             error.response.data &&
             error.response.data.message) ||

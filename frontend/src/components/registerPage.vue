@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-12">
+  <div class="col-md-4 mx-auto p-2">
     <div class="card card-container">
       <img
         id="profile-img"
@@ -32,7 +32,7 @@
             <label for="passwordConfirmation">Confirm Password</label>
             <Field
               name="passwordConfirmation"
-              type="passwordConfirmation"
+              type="password"
               class="form-control"
             />
             <ErrorMessage name="passwordConfirmation" class="error-feedback" />
@@ -96,6 +96,7 @@ export default {
         .max(40, "Must be maximum 40 characters!"),
       passwordConfirmation: yup
         .string()
+        .required("Password is required!")
         .oneOf([yup.ref("password"), null], "Passwords must match"),
     });
 

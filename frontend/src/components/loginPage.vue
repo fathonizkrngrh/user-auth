@@ -1,11 +1,9 @@
 <template>
-  <div class="col-md-12">
+  <div class="col-md-4 mx-auto mt-2 p-2">
     <div class="card card-container">
-      <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
-      />
+      <h2>
+        <strong class="text-primary">LOGIN</strong>
+      </h2>
       <Form @submit="handleLogin" :validation-schema="schema">
         <div class="form-group">
           <label for="email">Email</label>
@@ -94,3 +92,5 @@ export default {
   },
 };
 </script>
+
+<style scoped></style>

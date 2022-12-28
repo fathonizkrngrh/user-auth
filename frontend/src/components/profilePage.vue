@@ -2,42 +2,54 @@
   <div class="container">
     <header class="jumbotron">
       <h3>
-        <strong>{{ currentUser.user.username }}</strong> Profile
+        <strong>{{ userData.username }}</strong> Profile
+        <strong v-if="errorMessage" class="alert alert-danger" role="alert">
+          {{ errorMessage }}
+        </strong>
       </h3>
     </header>
     <p>
-      <strong>Token:</strong>
-      {{ currentUser.token.substring(0, 20) }} ...
-      {{ currentUser.token.substr(currentUser.token.length - 20) }}
-    </p>
-    <p>
       <strong>Id:</strong>
-      {{ currentUser.user.id }}
+      {{ userData.id }}
     </p>
     <p>
       <strong>Email:</strong>
-      {{ currentUser.user.email }}
+      {{ userData.email }}
     </p>
     <p>
       <strong>Authorities:</strong>
-      {{ currentUser.user.role }}
+      {{ userData.role }}
     </p>
   </div>
 </template>
 
 <script>
+import UserService from "../services/user.service";
+
 export default {
-  name: "ProfilePage",
-  computed: {
-    currentUser() {
-      console.log(this.$store.state.auth.user);
-      return this.$store.state.auth.user;
-    },
+  name: "UserBoard",
+  data() {
+    return {
+      userData: "",
+
+      errorMessage: "",
+    };
   },
   mounted() {
-    if (!this.currentUser) {
-      this.$router.push("/login");
-    }
+    UserService.getUserBoard().then(
+      (response) => {
+        console.log("response:", response.data.data.user);
+        this.userData = response.data.data.user;
+      },
+      (error) => {
+        this.errorMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+      }
+    );
   },
 };
 </script>

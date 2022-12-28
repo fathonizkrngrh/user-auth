@@ -22,4 +22,7 @@ router.post(
   authController.changePwd
 );
 
+// admin endpoint
+router.get("/admin/me", authentication, hasRole(["ADMIN"]), authController.me);
+
 module.exports = router;

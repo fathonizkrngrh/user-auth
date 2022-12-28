@@ -2,30 +2,12 @@
   <div class="container">
     <header class="jumbotron">
       <h3>
-        <strong>{{ userData.username }}</strong> Profile
+        <strong>{{ content }}</strong>
+        <strong v-if="errorMessage" class="alert alert-danger" role="alert">
+          {{ errorMessage }}
+        </strong>
       </h3>
     </header>
-    <!-- <p>
-      <strong>Token:</strong>
-      {{ userData.data.token.substring(0, 20) }} ...
-      {{ userData.data.token.substr(userData.data.token.length - 20) }}
-    </p>
-    <p>
-      <strong>Message:</strong>
-      {{ userData.data.message }}
-    </p>
-    <p>
-      <strong>Id:</strong>
-      {{ userData.data.user.id }}
-    </p>
-    <p>
-      <strong>Email:</strong>
-      {{ userData.data.user.email }}
-    </p>
-    <p>
-      <strong>Authorities:</strong>
-      {{ userData.data.user.role }}
-    </p> -->
   </div>
 </template>
 
@@ -36,16 +18,18 @@ export default {
   name: "UserBoard",
   data() {
     return {
-      userData: "",
+      content: "",
+
+      errorMessage: "",
     };
   },
   mounted() {
     UserService.getUserBoard().then(
       (response) => {
-        this.userData = response.data.data.user;
+        this.content = response.data.message;
       },
       (error) => {
-        this.userData =
+        this.errorMessage =
           (error.response &&
             error.response.data &&
             error.response.data.message) ||

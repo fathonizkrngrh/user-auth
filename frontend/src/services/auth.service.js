@@ -10,8 +10,15 @@ class AuthService {
         password: user.password,
       })
       .then((response) => {
-        if (response.data.data) {
-          localStorage.setItem("user", JSON.stringify(response.data.data));
+        if (response.data.data.token) {
+          localStorage.setItem(
+            "token",
+            JSON.stringify(response.data.data.token)
+          );
+          localStorage.setItem(
+            "role",
+            JSON.stringify(response.data.data.user.role)
+          );
         }
 
         return response.data.data;
@@ -19,14 +26,17 @@ class AuthService {
   }
 
   logout() {
-    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
   }
 
   register(user) {
     return axios.post(API_URL + "register", {
+      fullname: user.fullname,
       username: user.username,
       email: user.email,
       password: user.password,
+      passwordConfirmation: user.passwordConfirmation,
     });
   }
 }

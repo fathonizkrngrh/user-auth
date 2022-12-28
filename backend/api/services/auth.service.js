@@ -11,6 +11,24 @@ module.exports = {
       const { fullname, username, email, password } = req.body;
       const role = await Role.findOne({ where: { name: "USER" } });
 
+      const usernameExist = await User.findOne({
+        where: { username: username },
+      });
+      if (usernameExist) {
+        throw apiResponse(
+          status.BAD_REQUEST,
+          "BAD_REQUEST",
+          "Username already exist"
+        );
+      }
+      const emailExist = await User.findOne({ where: { email: email } });
+      if (emailExist) {
+        throw apiResponse(
+          status.BAD_REQUEST,
+          "BAD_REQUEST",
+          "Username already exist"
+        );
+      }
       const hashed = await hashPassword(password);
 
       const user = {
@@ -99,6 +117,7 @@ module.exports = {
       );
     }
   },
+
   changePwd: async (req) => {
     try {
       const { id } = req.user;

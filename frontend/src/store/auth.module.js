@@ -37,18 +37,6 @@ export const auth = {
         }
       );
     },
-    profile({ commit }) {
-      return AuthService.profile().then(
-        (response) => {
-          commit("profileSuccess");
-          return Promise.resolve(response.data);
-        },
-        (error) => {
-          commit("registerFailure");
-          return Promise.reject(error);
-        }
-      );
-    },
   },
   mutations: {
     loginSuccess(state, user) {

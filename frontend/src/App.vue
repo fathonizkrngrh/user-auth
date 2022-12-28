@@ -11,9 +11,6 @@
         <li v-if="showAdminBoard" class="nav-item">
           <router-link to="/admin" class="nav-link">Admin Board</router-link>
         </li>
-        <li v-if="showModeratorBoard" class="nav-item">
-          <router-link to="/mod" class="nav-link">Moderator Board</router-link>
-        </li>
         <li class="nav-item">
           <router-link v-if="currentUser" to="/user" class="nav-link"
             >User</router-link
@@ -38,7 +35,7 @@
         <li class="nav-item">
           <router-link to="/profile" class="nav-link">
             <font-awesome-icon icon="user" />
-            {{ currentUser.user.username }}
+            {{ currentUser.role }}
           </router-link>
         </li>
         <li class="nav-item">
@@ -59,19 +56,14 @@
 export default {
   computed: {
     currentUser() {
-      console.log(this.$store.state.auth.user);
-      return this.$store.state.auth.user;
+      // const role = localStorage.getItem("role");
+
+      return this.$store.state.auth;
     },
     showAdminBoard() {
-      if (this.currentUser && this.currentUser.user.role.includes("ADMIN")) {
-        return this.currentUser.user.role.includes("ADMIN");
-      }
-
-      return false;
-    },
-    showModeratorBoard() {
-      if (this.currentUser && this.currentUser["roles"]) {
-        return this.currentUser["roles"].includes("ROLE_MODERATOR");
+      const role = localStorage.getItem("role");
+      if (role == "ADMIN") {
+        return true;
       }
 
       return false;
@@ -79,6 +71,7 @@ export default {
   },
   methods: {
     logOut() {
+      this.currentUser = undefined;
       this.$store.dispatch("auth/logout");
       this.$router.push("/login");
     },
@@ -93,5 +86,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.container {
+  width: 50%;
 }
 </style>

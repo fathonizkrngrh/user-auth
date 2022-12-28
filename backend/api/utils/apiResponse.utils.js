@@ -32,8 +32,7 @@ module.exports = {
     const result = {};
     result.code = StatusCodes.UNPROCESSABLE_ENTITY;
     result.status = "UNPROCESSABLE_ENTITY";
-    result.message = "The given data was invalid.";
-    result.errors = errorsCustomMessage(errors);
+    result.message = errorsCustomMessage(errors);
 
     return result;
   },
