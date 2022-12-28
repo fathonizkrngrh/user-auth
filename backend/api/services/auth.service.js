@@ -99,7 +99,7 @@ module.exports = {
       );
     }
   },
-  register: async (req) => {
+  changePwd: async (req) => {
     try {
       const { id } = req.user;
       const { oldPassword, newPassword } = req.body;

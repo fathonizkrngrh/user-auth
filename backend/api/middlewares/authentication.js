@@ -6,6 +6,9 @@ module.exports = {
   authentication: async (req, res, next) => {
     try {
       const bearer = req.headers["authorization"];
+      console.log("bearer :", bearer);
+      // console.log("header :", req.headers);
+      // console.log("token :", req.headers["x-access-token"]);
       if (!bearer)
         throw apiResponse(
           status.UNAUTHORIZED,

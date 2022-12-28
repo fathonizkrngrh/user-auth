@@ -1,6 +1,7 @@
 require("dotenv").config();
 const createError = require("http-errors");
 const express = require("express");
+const cors = require("cors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
@@ -12,7 +13,12 @@ const {
 const routes = require("./routes/index.route");
 
 const app = express();
-const port = process.env.PORT || 7000;
+const port = process.env.PORT || 8080;
+
+var corsOptions = {
+  origin: "http://localhost:8081",
+};
+app.use(cors(corsOptions));
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -22,6 +28,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(function (req, res, next) {
+  res.header(
+    "Access-Control-Allow-Headers",
+    "x-access-token, Origin, Content-Type, Accept"
+  );
+  next();
+});
 
 app.use("/api", routes);
 
